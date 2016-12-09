@@ -7,10 +7,12 @@
 var app = require('../app');
 var debug = require('debug')('AxelMemoTest:server');
 var http = require('http');
-var realtimeflow = require('../routes/machine')
+var machine = require('../routes/machine')
 
 
-
+//连接机器
+machine.connect();
+console.log('connected')
 /**
  * Get port from environment and store in Express.
  */
@@ -51,8 +53,28 @@ server.on('listening', onListening);
 
 /**
  * 发送实时数据
+ * @author: 程虎子
  */
+
+  var dataflow = new Array(5*256)
+  for (var i=0;i<dataflow.length;i++){
+    dataflow[i]=[0,0,0,0,0,0,0,0];
+  }
+ 
 io.on('connection', function (socket) {
+  
+
+  
+  machine.listener.on('change', sample =>{
+
+    //console.log(sample)
+    var channeldata = sample.channelData;
+    dataflow.push(channeldata);
+    dataflow.shift()
+    //console.log(dataflow)
+
+    socket.emit('hereur', channeldata);
+  })
 
   socket.emit('news', { hello: 'world' });
   socket.on('my other event', function (data) {

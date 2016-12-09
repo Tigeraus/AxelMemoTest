@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 	if(!req.body.wid) {
 		word.getWordsFromRDS(function(ok) {
 			if(ok) {
-				machine.connect();
+				//machine.connect();
 				createDir();
 				resWord(res);
 			} else {
@@ -41,7 +41,7 @@ function resWord(res) {
 	var w = word.getWord();
 	if(w == undefined) {
 		res.send('测试完成！');
-		machine.disconnect();
+		//machine.disconnect();
 	} else {
 		res.json(w);
 		machine.start();
