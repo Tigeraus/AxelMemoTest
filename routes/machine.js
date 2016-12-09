@@ -14,6 +14,7 @@ var flowFocusLevel=new Array(10); //注意力水平列表
 for (var i=0;i<10;i++){
 	flowFocusLevel[i] = 0;
 }
+var machineListener = new events.EventEmitter();
 var flowData=new Array(); //流动记录BCI数据
 var rate=0; //采样率
 var sampleCount=0; //采样数
@@ -21,8 +22,8 @@ var loading = false;
 
 //导出flowFocusLevel变量
 module.exports.focuslevel_list = flowFocusLevel;
-//加载模块
-//var calufocus = require('./calculous');
+module.exports.listener = machineListener;
+
 var OpenBCIBoard = require('openbci').OpenBCIBoard;
 var ourBoard = new OpenBCIBoard({
 	simulate: true
@@ -61,6 +62,7 @@ module.exports.connect = function() {
 				ourBoard.streamStart();
 				ourBoard.on('sample',function(sample) {
 					/** Work with sample */
+					machineListener.emit('change', sample);
 					var data = new Array();
 					for (var i = 0; i < ourBoard.numberOfChannels(); i++) {
 						data.push(sample.channelData[i].toFixed(8));
