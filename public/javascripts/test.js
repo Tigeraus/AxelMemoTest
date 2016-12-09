@@ -1,24 +1,22 @@
 var vm;
 var word;
 var count;
-var onload;
 var timer;
 
 function init() {
 	vm = new Vue({
 		el: '#vm',
 		data: {
-			word: 'word',
+			word: 'loading words...',
 			score: 0,
 		}
 	});
 	count = 0;
-	onload = false;
+	showbtn(false);
 	getWord();
 }
 
 function test(l) {
-	if(onload) return;
 	vm.score = (vm.score / 20 * count + l) / (count + 1) * 20;
 	count += 1;
 	getWord(l);
@@ -59,10 +57,9 @@ function getWord(level) {
 						window.location.href = '/';
 				}
 			}
-			onload = false;
 		}
 	};
-	xhr.open('post','/');
+	xhr.open('post','/test');
 	xhr.setRequestHeader('Content-Type','application/json');
 	if(word && level != undefined) {
 		xhr.send(JSON.stringify({
@@ -72,5 +69,4 @@ function getWord(level) {
 	} else {
 		xhr.send('');
 	}
-	onload = true;
 }

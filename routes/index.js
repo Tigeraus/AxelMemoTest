@@ -4,10 +4,13 @@ var word = require('./word');
 var machine = require('./machine');
 var fs = require('fs');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('test', { title: '测试' });
-}).post('/', function(req, res, next) {
+	res.render('index', { title: 'AxelMemoTestIndex'});
+});
+
+router.get('/test', function(req, res, next) {
+  res.render('test', { title: 'AxelMemoTest' });
+}).post('/test', function(req, res, next) {
 	var cookie = req.cookies;
 	console.log(req.body);
 	if(!req.body.wid) {
