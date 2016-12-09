@@ -7,6 +7,7 @@ author: 程虎子
 var lib = require("ml-fft");
 var FFT = lib.FFT;
 var FFTUtils = lib.FFTUtils
+var ds = require('digitalsignals');
 
 /* 10秒的注意力水平列表
 之后将从 machine 里导入
@@ -47,6 +48,27 @@ getfocuslevel = function(dataqueue,sampling_rate){
     return focuslevel;
 }
 
-module.exports.focuslevel = getfocuslevel;
 
+
+function getfft(rawtimeseq){
+
+    //rawtimeseq.length should be256
+    //var timeseq = rawtimeseq.slice();
+    var timeseq = new Float32Array(rawtimeseq.length)
+    for (var i=0;i<rawtimeseq.length;i++){
+        timeseq[i]=rawtimeseq[i];
+    };
+
+    var fft = new ds.FFT(256,256);
+    fft.forward(timeseq);
+    var spectrum = fft.spectrum;
+    return spectrum
+
+}
+
+
+
+
+module.exports.focuslevel = getfocuslevel;
+module.exports.getfft = getfft;
 

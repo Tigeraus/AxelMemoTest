@@ -8,7 +8,7 @@ var app = require('../app');
 var debug = require('debug')('AxelMemoTest:server');
 var http = require('http');
 var machine = require('../routes/machine')
-
+var cal = require('../routes/calculous');
 
 //连接机器
 machine.connect();
@@ -76,8 +76,16 @@ io.on('connection', function (socket) {
       dataflow[i].shift();
     }
     if(sample.sampleNumber % 16 ==0){
-      console.log(sample.sampleNumber);
-      socket.emit('hereur', dataflow);
+      for (var i=0;i<channeldata.length;i++){
+        spec = cal.getfft(dataflow[i].slice(0,256));
+        console.log(spec)
+      }
+      //console.log(sample.sampleNumber);
+      socket.emit('hereur', {'spec':spec,'channeldata':dataflow});
+      //SEND FFT
+
+      
+
     }
   })
 
