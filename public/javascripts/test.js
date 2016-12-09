@@ -66,6 +66,7 @@ function getWord(level) {
 	xhr.setRequestHeader('Content-Type','application/json');
 	if(word && level != undefined) {
 		xhr.send(JSON.stringify({
+			wid: word.id,
 			grade: level
 		}));
 	} else {

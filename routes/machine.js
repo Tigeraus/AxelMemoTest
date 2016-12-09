@@ -31,7 +31,6 @@ var ourBoard = new OpenBCIBoard({
 //私有函数
 //取得bci数据
 function getbcidata() {
-	loading = false;
 	return flowData.slice(0);
 }
 
@@ -62,13 +61,14 @@ module.exports.connect = function() {
 				ourBoard.streamStart();
 				ourBoard.on('sample',function(sample) {
 					/** Work with sample */
-					var data = [];
+					var data = new Array();
 					for (var i = 0; i < ourBoard.numberOfChannels(); i++) {
 						data.push(sample.channelData[i].toFixed(8));
 					}
-					if(loading && flowData.length < 10 * rate) {
+					if(loading && sampleCount < 5) {
 						flowData.push(data);
-						sampleCount ++;
+						if(sample.sampleNumber == 255)
+							sampleCount ++;
 					}
 				});
 			});
@@ -96,6 +96,7 @@ module.exports.getbcidata = getbcidata;
 
 module.exports.start = () => {
 	flowData = new Array();
+	sampleCount = 0;
 	loading = true;
 }
 
