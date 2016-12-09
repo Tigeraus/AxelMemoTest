@@ -55,10 +55,10 @@ server.on('listening', onListening);
  * 发送实时数据
  * @author: 程虎子
  */
-  var timelen = 768
+  var timelen = 5*256;
   var dataflow = new Array(8)
   for (var i=0;i<dataflow.length;i++){
-    dataflow[i]=new Array(768)
+    dataflow[i]=new Array(timelen)
   }
  
 io.on('connection', function (socket) {
@@ -67,13 +67,18 @@ io.on('connection', function (socket) {
   
   machine.listener.on('change', sample =>{
 
-    //console.log(sample)
+    //console.log(sample)if
+    //if(sample.sampleNumber)
     var channeldata = sample.channelData;
     //开始更新数据
-    dataflow.shift()
-    //console.log(dataflow)
-
-    socket.emit('hereur', channeldata);
+    for (var i=0;i<channeldata.length;i++){
+      dataflow[i].push(channeldata[i]);
+      dataflow[i].shift();
+    }
+    if(sample.sampleNumber % 16 ==0){
+      console.log(sample.sampleNumber);
+      socket.emit('hereur', dataflow);
+    }
   })
 
   socket.emit('news', { hello: 'world' });
