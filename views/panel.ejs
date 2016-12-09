@@ -1,0 +1,123 @@
+<html>
+    <head>
+        <title>OpenBCI Dashboard</title>
+        <meta charset="utf-8">
+        <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-8">
+                    <h3>Real Time data</h3>
+                    <canvas id="realtimeChart"></canvas>
+                </div>
+                <h3>Info</h3>
+                <div class="col-xs-4"></div>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                    <h3>FFT</h3>
+                    <canvas id="realtimeFFT"></canvas>
+                </div>
+                <h3>Control</h3>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+
+    </body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/Chart.js/2.4.0/Chart.min.js"></script>
+    
+    <!--<script src="https://unpkg.com/vue@2.1.4/dist/vue.js"></script>-->
+    <script>
+        var ctx = document.getElementById("realtimeChart");
+        var socket = io('http://localhost');
+        var leng = 512;
+        var datalist = new Array(leng);
+        var timelist = new Array(leng);
+        for (var i=0;i<leng;i++){
+            datalist[i]=0;
+            timelist[i]=((i+1)/256.0).toString();
+        };
+        /*var app = new Vue({
+            el: '#chart',
+            data: {
+                realtimedata: datalist
+            }
+        });*/
+         var data={
+                labels: timelist,
+                datasets: [{
+                    label: '# of Votes',
+                    data: datalist,
+				    fill: false,
+                    lineTension: 0,
+                    backgroundColor: "rgba(0,191,255,0.4)",
+                    borderColor: "rgba(0,191,255,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(0,191,255,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 1,
+                    pointHoverBackgroundColor: "rgba(0,191,255,1)",
+				    pointHoverBorderColor: "rgba(220,220,220,1)",
+				    pointHoverBorderWidth: 1,
+				    pointRadius: 1,
+				    pointHitRadius: 1
+                }]
+            };
+
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+					animation: {
+						duration: 0
+
+					},
+					legend:[{
+						display:false
+					}],
+					responsive: true,
+					title:[{
+							display: false
+						}],
+					scales: {
+						xAxes: [{
+							display: false
+						}],
+						yAxes: [{
+							display: true,
+							ticks: {
+							max: 0.3,
+							min: -0.3,
+							stepSize: 0.05
+						}
+						}]
+					}
+				}
+        });
+
+        socket.on('news',function(news){
+            console.log(news)
+        });
+
+        socket.on('data', function (xdata) {
+            //console.log(data);
+
+            datalist.push(xdata.channelData[1].toFixed(8));
+            datalist.shift();
+            myLineChart.update(); //
+            //plot
+            socket.emit('my other event', { my: 'data' });
+        });
+    </script>
+</html>

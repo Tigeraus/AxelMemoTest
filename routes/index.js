@@ -26,6 +26,16 @@ router.get('/', function(req, res, next) {
 	}
 });
 
+
+
+/**. get datapanel */
+router.get('/panel',function(req,res,next){
+	res.render('panel', { title: 'Express' });
+});
+
+
+
+
 function resWord(res) {
 	var w = word.getWord();
 	if(w == undefined) {
@@ -38,7 +48,9 @@ function resWord(res) {
 }
 
 function createDir() {
-	if(fs.access())
+	if(fs.access()){
+
+	}
 }
 
 function recordData(body) {

@@ -3,6 +3,12 @@
  * @author: hopeful
  */
 //定义变量
+
+var events=require('events');
+var util=require('util');
+
+
+
 var portName; //端口名
 var flowFocusLevel=new Array(10); //注意力水平列表
 for (var i=0;i<10;i++){
