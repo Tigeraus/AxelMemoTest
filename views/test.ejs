@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>词汇认知程度测试</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+	<script src='/javascripts/vue.min.js'></script>
+	<script src="/javascripts/test.js"></script>
+  </head>
+  <body onload='init()'>
+	  <div id='vm' style='top;50%'>
+		  <div id='word' align='center' style='font-size:100pt;margin:80pt;'>
+			  {{ word }}
+		  </div>
+		  <p align='center' style='margin:20pt;'>
+		  	<button class='btn' type='button' onclick='test(5)'>5</button>
+			<button class='btn' type='button' onclick='test(4)'>4</button>
+			<button class='btn' type='button' onclick='test(3)'>3</button>
+		  	<button class='btn' type='button' onclick='test(2)'>2</button>
+		  	<button class='btn' type='button' onclick='test(1)'>1</button>
+			<button class='btn' type='button' onclick='test(0)'>0</button>
+		  </p>
+		  <p id='score' style='display:none;'>
+	  		score:{{ score }}
+		  </p>
+	  </div>
+  </body>
+</html>
